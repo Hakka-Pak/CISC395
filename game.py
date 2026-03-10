@@ -128,7 +128,7 @@ class SnakeGame:
             self.handle_input()
             self.update()
             self.render()
-            self.clock.tick(10)
+            self.clock.tick(15)
 
 if __name__ == "__main__":
     game = SnakeGame()
