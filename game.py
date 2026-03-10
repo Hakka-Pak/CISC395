@@ -10,10 +10,10 @@ GRID_WIDTH = WINDOW_WIDTH // GRID_SIZE
 GRID_HEIGHT = WINDOW_HEIGHT // GRID_SIZE
 
 # Colors
-BLACK = (0, 0, 0)
+DARK_BLUE = (0, 0, 50)
 WHITE = (255, 255, 255)
-GREEN = (0, 255, 0)
-BRIGHT_GREEN = (50, 255, 50)
+YELLOW = (255, 255, 0)
+ORANGE = (255, 165, 0)
 RED = (255, 0, 0)
 SHADOW = (100, 0, 0)
 HIGHLIGHT = (255, 100, 100)
@@ -98,11 +98,11 @@ class SnakeGame:
         pygame.draw.circle(self.screen, HIGHLIGHT, (center[0] - 2, center[1] - 2), radius // 2)
 
     def render(self):
-        self.screen.fill(BLACK)
+        self.screen.fill(DARK_BLUE)
 
         # Draw snake
         for i, (x, y) in enumerate(self.snake):
-            color = BRIGHT_GREEN if i == 0 else GREEN
+            color = ORANGE if i == 0 else YELLOW
             pygame.draw.rect(self.screen, color, (x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE - 1, GRID_SIZE - 1))
 
         # Draw food
