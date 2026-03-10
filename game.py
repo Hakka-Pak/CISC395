@@ -15,8 +15,11 @@ WHITE = (255, 255, 255)
 YELLOW = (255, 255, 0)
 ORANGE = (255, 165, 0)
 RED = (255, 0, 0)
+PURPLE = (128, 0, 128)
 SHADOW = (100, 0, 0)
 HIGHLIGHT = (255, 100, 100)
+PURPLE_SHADOW = (50, 0, 50)
+PURPLE_HIGHLIGHT = (200, 100, 200)
 
 class SnakeGame:
     def __init__(self):
@@ -33,15 +36,16 @@ class SnakeGame:
         self.direction = (1, 0)
         self.score = 0
         self.game_over = False
-        self.foods = []
+        self.foods = [] # List of (x, y, is_special)
         for _ in range(3):
             self.spawn_food()
 
     def spawn_food(self):
         while True:
-            food = (random.randint(0, GRID_WIDTH - 1), random.randint(0, GRID_HEIGHT - 1))
-            if food not in self.snake and food not in self.foods:
-                self.foods.append(food)
+            x, y = random.randint(0, GRID_WIDTH - 1), random.randint(0, GRID_HEIGHT - 1)
+            is_special = random.random() < 0.2 # 20% chance for special food
+            if (x, y) not in self.snake and not any(f[0] == x and f[1] == y for f in self.foods):
+                self.foods.append((x, y, is_special))
                 break
 
     def handle_input(self):
@@ -80,22 +84,33 @@ class SnakeGame:
         self.snake.insert(0, new_head)
 
         # Check food
-        if new_head in self.foods:
-            self.score += 10
-            self.foods.remove(new_head)
+        eaten_food = None
+        for food in self.foods:
+            if new_head[0] == food[0] and new_head[1] == food[1]:
+                eaten_food = food
+                break
+
+        if eaten_food:
+            self.score += 50 if eaten_food[2] else 10
+            self.foods.remove(eaten_food)
             self.spawn_food()
         else:
             self.snake.pop()
 
-    def draw_3d_food(self, x, y):
+    def draw_3d_food(self, x, y, is_special):
         center = (x * GRID_SIZE + GRID_SIZE // 2, y * GRID_SIZE + GRID_SIZE // 2)
         radius = GRID_SIZE // 2 - 2
+        
+        main_color = PURPLE if is_special else RED
+        shadow_color = PURPLE_SHADOW if is_special else SHADOW
+        highlight_color = PURPLE_HIGHLIGHT if is_special else HIGHLIGHT
+
         # Shadow
-        pygame.draw.circle(self.screen, SHADOW, (center[0] + 2, center[1] + 2), radius)
+        pygame.draw.circle(self.screen, shadow_color, (center[0] + 2, center[1] + 2), radius)
         # Main body
-        pygame.draw.circle(self.screen, RED, center, radius)
+        pygame.draw.circle(self.screen, main_color, center, radius)
         # Highlight
-        pygame.draw.circle(self.screen, HIGHLIGHT, (center[0] - 2, center[1] - 2), radius // 2)
+        pygame.draw.circle(self.screen, highlight_color, (center[0] - 2, center[1] - 2), radius // 2)
 
     def render(self):
         self.screen.fill(DARK_BLUE)
@@ -106,8 +121,8 @@ class SnakeGame:
             pygame.draw.rect(self.screen, color, (x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE - 1, GRID_SIZE - 1))
 
         # Draw food
-        for x, y in self.foods:
-            self.draw_3d_food(x, y)
+        for x, y, is_special in self.foods:
+            self.draw_3d_food(x, y, is_special)
 
         # Draw UI
         score_surface = self.font.render(f"Score: {self.score}", True, WHITE)
