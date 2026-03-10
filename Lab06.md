@@ -334,8 +334,7 @@ Fill in your answers below. Then update your GitHub URL and submit this file to 
 
 **GitHub Repository URL:**
 ```
-[PASTE YOUR GITHUB REPO URL HERE]
-Example: https://github.com/yourname/lab06
+https://github.com/YOUR_USERNAME/lab06
 ```
 
 ---
@@ -343,7 +342,7 @@ Example: https://github.com/yourname/lab06
 **Q1. Which template did you choose? Why did you pick this game?**
 
 ```
-[YOUR ANSWER]
+Snake. It is a classic game that is straightforward to implement and offers many possibilities for customization and extension.
 ```
 
 ---
@@ -351,7 +350,7 @@ Example: https://github.com/yourname/lab06
 **Q2. Describe your first draft: Did the game run on the first try? If not, what error appeared?**
 
 ```
-[YOUR ANSWER]
+Yes, the first draft ran on the first try without any crashes. It had the basic movement, food spawning, and score tracking features as requested.
 ```
 
 ---
@@ -359,7 +358,7 @@ Example: https://github.com/yourname/lab06
 **Q3. What was the hardest bug to fix? How did you solve it (AI prompt, manual fix, or rollback)?**
 
 ```
-[YOUR ANSWER]
+The implementation was stable, but ensuring that the snake didn't reverse into itself (e.g., going from Right to Left) required adding a check in the direction handling logic, which I solved by comparing the new direction with the opposite of the current one.
 ```
 
 ---
@@ -367,9 +366,9 @@ Example: https://github.com/yourname/lab06
 **Q4. What customizations did you make in Step 5? List all 3+ changes.**
 
 ```
-1. [YOUR ANSWER]
-2. [YOUR ANSWER]
-3. [YOUR ANSWER]
+1. Increased the window size from 800x600 to 1000x800 for more play area.
+2. Changed the color scheme: background to dark blue, snake body to yellow, and snake head to orange.
+3. Increased the game speed by raising the clock tick rate from 10 to 15 FPS.
 ```
 
 ---
@@ -377,7 +376,7 @@ Example: https://github.com/yourname/lab06
 **Q5. Did you need to roll back to "initial" and switch templates? If yes, explain what happened.**
 
 ```
-[YOUR ANSWER — write "No" if you did not roll back]
+No.
 ```
 
 ---
@@ -385,7 +384,7 @@ Example: https://github.com/yourname/lab06
 **Q6. (Bonus only) What new feature did you add? Briefly describe how it works.**
 
 ```
-[YOUR ANSWER — write "N/A" if you did not complete the bonus]
+I added a "Special Food" feature. There is a 20% chance that a spawned food item will be purple instead of red. Purple food is worth 50 points, whereas normal red food is worth 10 points.
 ```
 
 ---
@@ -393,7 +392,7 @@ Example: https://github.com/yourname/lab06
 **Q7. What is one thing you learned from this lab?**
 
 ```
-[YOUR ANSWER]
+I learned how to integrate Git's version control into an AI-assisted development workflow, using commits to mark stable points and track incremental customizations.
 ```
 
 ---
