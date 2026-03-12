@@ -13,8 +13,8 @@ BALL_SPEED_Y = 5
 WINNING_SCORE = 11
 
 # Colors
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
+NAVY_BLUE = (0, 0, 128)
+GOLD = (239, 191, 4)
 
 class PongGame:
     """
@@ -112,32 +112,32 @@ class PongGame:
     def draw_net(self):
         """Draws a vertical dashed line in the center of the screen."""
         for y in range(0, WINDOW_HEIGHT, 40):
-            pygame.draw.rect(self.screen, WHITE, (WINDOW_WIDTH // 2 - 2, y + 10, 4, 20))
+            pygame.draw.rect(self.screen, GOLD, (WINDOW_WIDTH // 2 - 2, y + 10, 4, 20))
 
     def render(self):
         """Renders the game objects to the screen."""
-        self.screen.fill(BLACK)
+        self.screen.fill(NAVY_BLUE)
         
         # Draw net
         self.draw_net()
         
         # Draw paddles
-        pygame.draw.rect(self.screen, WHITE, (20, self.p1_y, PADDLE_WIDTH, PADDLE_HEIGHT))
-        pygame.draw.rect(self.screen, WHITE, (WINDOW_WIDTH - 20 - PADDLE_WIDTH, self.p2_y, PADDLE_WIDTH, PADDLE_HEIGHT))
+        pygame.draw.rect(self.screen, GOLD, (20, self.p1_y, PADDLE_WIDTH, PADDLE_HEIGHT))
+        pygame.draw.rect(self.screen, GOLD, (WINDOW_WIDTH - 20 - PADDLE_WIDTH, self.p2_y, PADDLE_WIDTH, PADDLE_HEIGHT))
         
         # Draw ball
-        pygame.draw.rect(self.screen, WHITE, (self.ball_x, self.ball_y, BALL_SIZE, BALL_SIZE))
+        pygame.draw.rect(self.screen, GOLD, (self.ball_x, self.ball_y, BALL_SIZE, BALL_SIZE))
         
         # Draw scores
-        p1_score_text = self.font.render(str(self.p1_score), True, WHITE)
-        p2_score_text = self.font.render(str(self.p2_score), True, WHITE)
+        p1_score_text = self.font.render(str(self.p1_score), True, GOLD)
+        p2_score_text = self.font.render(str(self.p2_score), True, GOLD)
         self.screen.blit(p1_score_text, (WINDOW_WIDTH // 4, 20))
         self.screen.blit(p2_score_text, (3 * WINDOW_WIDTH // 4, 20))
         
         # Draw winner message
         if self.winner:
-            win_text = self.large_font.render(f"Player {self.winner} Wins!", True, WHITE)
-            restart_text = self.font.render("Press 'R' to Restart", True, WHITE)
+            win_text = self.large_font.render(f"Player {self.winner} Wins!", True, GOLD)
+            restart_text = self.font.render("Press 'R' to Restart", True, GOLD)
             
             win_rect = win_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 40))
             restart_rect = restart_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 40))
