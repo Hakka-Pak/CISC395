@@ -17,6 +17,7 @@ def main():
         print("[3] Search by country")
         print("[4] Add note to a destination")
         print("[5] Quit")
+        print("[6] Show Statistics")
         
         choice = input("Choice: ")
 
@@ -75,6 +76,23 @@ def main():
             print("Goodbye!")
             break
         
+        elif choice == '6':
+            if len(collection) == 0:
+                print("No trips saved yet.")
+            else:
+                counts = collection.count_by_country()
+                top_country_name = collection.top_country()
+                top_country_count = counts.get(top_country_name, 0)
+                
+                print("\n=== Trip Statistics ===")
+                print(f"Total trips: {len(collection)}")
+                print(f"Total budget: ${collection.total_budget():,.2f}")
+                print(f"Average budget: ${collection.average_budget():,.2f}")
+                print(f"Top country: {top_country_name} ({top_country_count} trips)")
+                print("Trips by country:")
+                for country, count in counts.items():
+                    print(f"  {country}: {count}")
+
         else:
             print("Invalid option, try again.")
 

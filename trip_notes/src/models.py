@@ -30,3 +30,25 @@ class TripCollection:
 
     def __len__(self) -> int:
         return len(self._trips)
+
+    def total_budget(self) -> float:
+        if not self._trips:
+            return 0.0
+        return sum(t.budget for t in self._trips)
+
+    def average_budget(self) -> float:
+        if len(self._trips) == 0:
+            return 0.0
+        return self.total_budget() / len(self._trips)
+
+    def top_country(self) -> str:
+        counts = self.count_by_country()
+        if not counts:
+            return "No trips yet"
+        return max(counts, key=counts.get)
+
+    def count_by_country(self) -> dict[str, int]:
+        counts = {}
+        for t in self._trips:
+            counts[t.country] = counts.get(t.country, 0) + 1
+        return counts
