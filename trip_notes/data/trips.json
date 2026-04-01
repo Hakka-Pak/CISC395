@@ -1,0 +1,45 @@
+[
+  {
+    "name": "Fun place",
+    "country": "Flordia",
+    "budget": 500.0,
+    "notes": [
+      "disney land"
+    ],
+    "date_added": "2026-03-30"
+  },
+  {
+    "name": "Mystery",
+    "country": "Brazil",
+    "budget": 700.0,
+    "notes": [
+      "beautiful views"
+    ],
+    "date_added": "2026-03-30"
+  },
+  {
+    "name": "Haiti",
+    "country": "Haiti",
+    "budget": 0.0,
+    "notes": [
+      "The dominican republic is close by"
+    ],
+    "date_added": "2026-03-31"
+  },
+  {
+    "name": "Tropical",
+    "country": "Brazil",
+    "budget": 750.0,
+    "notes": [],
+    "date_added": "2026-03-31"
+  },
+  {
+    "name": "honolulu",
+    "country": "Hawaii",
+    "budget": 2000.0,
+    "notes": [
+      "a island with lots of beaches and palm tress with a beautiful blue water scenery "
+    ],
+    "date_added": "2026-03-31"
+  }
+]
