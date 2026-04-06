@@ -69,12 +69,15 @@ def main() -> None:
 	collection = load_trips()
 
 	while True:
-		print("=== Trip Notes ===")
+		print("\n=== Trip Notes ===")
+		print("\n-- Data --")
 		print("[1] Add destination")
 		print("[2] View all destinations")
 		print("[3] Search by country")
 		print("[4] Add note to a destination")
-		print("[5] Quit")
+		print("\n-- AI --")
+		print("(coming soon)\n")
+		print("[Q] Quit")
 
 		choice = input("Choose an option: ")
 
@@ -86,7 +89,7 @@ def main() -> None:
 			show_search_results(collection)
 		elif choice == "4":
 			add_note_to_destination(collection)
-		elif choice == "5":
+		elif choice.lower() == "q":
 			print("Goodbye!")
 			break
 		else:
