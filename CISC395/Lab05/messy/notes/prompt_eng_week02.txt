@@ -1,4 +1,0 @@
-Week 2 notes - Prompt Engineering
-- Zero shot prompting
-- Few shot examples
-- Temperature parameter

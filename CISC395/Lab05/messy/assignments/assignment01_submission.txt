@@ -1,3 +1,0 @@
-This is homework submission for assignment 1.
-Topic: Introduction to LLMs
-Student: Alice Chen
