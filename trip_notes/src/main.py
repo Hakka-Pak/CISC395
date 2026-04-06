@@ -1,100 +1,97 @@
-import sys
 import os
+import sys
 
-# Fix import path to work from the trip_notes/ root
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.models import Destination, TripCollection
+from src.models import Destination
 from src.storage import load_trips, save_trips
 
-def main():
-    collection = load_trips()
 
-    while True:
-        print("\n=== Trip Notes ===")
-        print("[1] Add destination")
-        print("[2] View all destinations")
-        print("[3] Search by country")
-        print("[4] Add note to a destination")
-        print("[5] Quit")
-        print("[6] Show Statistics")
-        
-        choice = input("Choice: ")
+def show_all_trips(collection) -> None:
+	if len(collection) == 0:
+		print("No trips saved yet.")
+		return
 
-        if choice == '1':
-            name = input("Enter name: ")
-            country = input("Enter country: ")
-            try:
-                budget = float(input("Enter budget: "))
-            except ValueError:
-                print("Invalid budget. Using 0.0")
-                budget = 0.0
-            
-            dest = Destination(name=name, country=country, budget=budget)
-            collection.add(dest)
-            save_trips(collection)
-            print("Destination added!")
+	for index, trip in enumerate(collection.get_all(), start=1):
+		print(f"{index}. {trip.name} ({trip.country}) - ${trip.budget}")
+		print(f"   Notes: {trip.notes}")
 
-        elif choice == '2':
-            if len(collection) == 0:
-                print("No trips saved yet.")
-            else:
-                for i, trip in enumerate(collection.get_all(), 1):
-                    print(f"{i}. {trip.name} ({trip.country}) - Budget: ${trip.budget:.2f}")
-                    if trip.notes:
-                        print(f"   Notes: {', '.join(trip.notes)}")
 
-        elif choice == '3':
-            country = input("Enter country to search: ")
-            results = collection.search_by_country(country)
-            if not results:
-                print(f"No destinations found in {country}.")
-            else:
-                for trip in results:
-                    print(f"- {trip.name} - Budget: ${trip.budget:.2f}")
+def show_search_results(collection) -> None:
+	country = input("Country: ")
+	results = collection.search_by_country(country)
 
-        elif choice == '4':
-            if len(collection) == 0:
-                print("No destinations available to add notes.")
-                continue
-            
-            # Print numbered list
-            for i, trip in enumerate(collection.get_all(), 1):
-                print(f"{i}. {trip.name} ({trip.country})")
-            
-            try:
-                idx = int(input("Select destination number: "))
-                trip = collection.get_by_index(idx - 1)
-                note = input("Enter note: ")
-                trip.add_note(note)
-                save_trips(collection)
-                print("Note added!")
-            except (ValueError, IndexError):
-                print("Invalid selection.")
+	if not results:
+		print("No trips found.")
+		return
 
-        elif choice == '5':
-            print("Goodbye!")
-            break
-        
-        elif choice == '6':
-            if len(collection) == 0:
-                print("No trips saved yet.")
-            else:
-                counts = collection.count_by_country()
-                top_country_name = collection.top_country()
-                top_country_count = counts.get(top_country_name, 0)
-                
-                print("\n=== Trip Statistics ===")
-                print(f"Total trips: {len(collection)}")
-                print(f"Total budget: ${collection.total_budget():,.2f}")
-                print(f"Average budget: ${collection.average_budget():,.2f}")
-                print(f"Top country: {top_country_name} ({top_country_count} trips)")
-                print("Trips by country:")
-                for country, count in counts.items():
-                    print(f"  {country}: {count}")
+	for index, trip in enumerate(results, start=1):
+		print(f"{index}. {trip.name} ({trip.country}) - ${trip.budget}")
+		print(f"   Notes: {trip.notes}")
 
-        else:
-            print("Invalid option, try again.")
+
+def add_destination(collection) -> None:
+	name = input("Name: ")
+	country = input("Country: ")
+
+	try:
+		budget = float(input("Budget: "))
+	except ValueError:
+		print("Invalid budget.")
+		return
+
+	collection.add(Destination(name, country, budget))
+	save_trips(collection)
+	print("Destination added.")
+
+
+def add_note_to_destination(collection) -> None:
+	if len(collection) == 0:
+		print("No trips saved yet.")
+		return
+
+	show_all_trips(collection)
+
+	try:
+		choice = int(input("Choose a trip number: "))
+		trip = collection.get_by_index(choice - 1)
+	except (ValueError, IndexError):
+		print("Invalid option, try again.")
+		return
+
+	note = input("Note: ")
+	trip.add_note(note)
+	save_trips(collection)
+	print("Note added.")
+
+
+def main() -> None:
+	collection = load_trips()
+
+	while True:
+		print("=== Trip Notes ===")
+		print("[1] Add destination")
+		print("[2] View all destinations")
+		print("[3] Search by country")
+		print("[4] Add note to a destination")
+		print("[5] Quit")
+
+		choice = input("Choose an option: ")
+
+		if choice == "1":
+			add_destination(collection)
+		elif choice == "2":
+			show_all_trips(collection)
+		elif choice == "3":
+			show_search_results(collection)
+		elif choice == "4":
+			add_note_to_destination(collection)
+		elif choice == "5":
+			print("Goodbye!")
+			break
+		else:
+			print("Invalid option, try again.")
+
 
 if __name__ == "__main__":
-    main()
+	main()
