@@ -3,7 +3,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.ai_assistant import ask, TRAVEL_SYSTEM_PROMPT
+from src.ai_assistant import ask, TRAVEL_SYSTEM_PROMPT, generate_trip_briefing
 from src.models import Destination
 from src.storage import load_trips, save_trips
 
@@ -98,6 +98,35 @@ def ask_ai(collection) -> None:
 		print(f"Saved as a note on {trip.name}.")
 
 
+def show_trip_briefing(collection) -> None:
+	destinations = collection.get_all()
+	if not destinations:
+		print("No trips saved yet.")
+		return
+
+	for i, dest in enumerate(destinations, 1):
+		print(f"  [{i}] {dest.name}, {dest.country}")
+
+	try:
+		choice = int(input("Select trip number: ")) - 1
+		if choice < 0 or choice >= len(destinations):
+			raise IndexError
+		dest = destinations[choice]
+	except (ValueError, IndexError):
+		print("Invalid selection.")
+		return
+
+	print(f"Generating briefing for {dest.name}...")
+	result = generate_trip_briefing(dest.name, dest.country, dest.notes)
+
+	if result:
+		print(f"\n--- {dest.name} Briefing ---")
+		print(f"Overview:\n{result['overview']}")
+		print(f"\nPacking List:\n{result['packing_list']}")
+	else:
+		print("Briefing failed. Check your API connection.")
+
+
 def main() -> None:
 	collection = load_trips()
 
@@ -109,7 +138,8 @@ def main() -> None:
 		print("[3] Search by country")
 		print("[4] Add note to a destination")
 		print("\n-- AI --")
-		print("[6] Ask AI a travel question\n")
+		print("[6] Ask AI a travel question")
+		print("[7] Trip Briefing\n")
 		print("[Q] Quit")
 
 		choice = input("Choose an option: ")
@@ -124,6 +154,8 @@ def main() -> None:
 			add_note_to_destination(collection)
 		elif choice == "6":
 			ask_ai(collection)
+		elif choice == "7":
+			show_trip_briefing(collection)
 		elif choice.lower() == "q":
 			print("Goodbye!")
 			break
