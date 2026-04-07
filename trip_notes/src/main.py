@@ -3,6 +3,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from src.ai_assistant import ask, TRAVEL_SYSTEM_PROMPT
 from src.models import Destination
 from src.storage import load_trips, save_trips
 
@@ -65,6 +66,38 @@ def add_note_to_destination(collection) -> None:
 	print("Note added.")
 
 
+def ask_ai(collection) -> None:
+	question = input("Your question: ")
+	response = ask(question, system_prompt=TRAVEL_SYSTEM_PROMPT)
+
+	if response is None:
+		print("Error: Could not get a response from AI.")
+		return
+
+	print("\nAI Response:")
+	print(response)
+
+	save_choice = input("\nSave this as a note on a trip? (y/n): ")
+	if save_choice.lower() == "y":
+		if len(collection) == 0:
+			print("No trips saved yet.")
+			return
+
+		show_all_trips(collection)
+		try:
+			trip_index = int(input("Trip number: ")) - 1
+			if trip_index < 0 or trip_index >= len(collection):
+				raise IndexError
+			trip = collection.get_by_index(trip_index)
+		except (ValueError, IndexError):
+			print("Invalid option, saving cancelled.")
+			return
+
+		trip.add_note(response)
+		save_trips(collection)
+		print(f"Saved as a note on {trip.name}.")
+
+
 def main() -> None:
 	collection = load_trips()
 
@@ -76,7 +109,7 @@ def main() -> None:
 		print("[3] Search by country")
 		print("[4] Add note to a destination")
 		print("\n-- AI --")
-		print("(coming soon)\n")
+		print("[6] Ask AI a travel question\n")
 		print("[Q] Quit")
 
 		choice = input("Choose an option: ")
@@ -89,6 +122,8 @@ def main() -> None:
 			show_search_results(collection)
 		elif choice == "4":
 			add_note_to_destination(collection)
+		elif choice == "6":
+			ask_ai(collection)
 		elif choice.lower() == "q":
 			print("Goodbye!")
 			break
