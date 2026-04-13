@@ -311,6 +311,15 @@ if __name__ == "__main__":
 **Paste the build output:**
 ```
 [e.g., Indexed 14 chunks from 3 files.]
+
+--- Chunk 1 ---
+since 1888. FOR WINE LOVERS The picturesque KOSHU VALLEY in Yamanashi Prefecture boasts some 70 wineries dotted across the landscape. The signature white wine made here is produced from the native Koshu grape; there is ample opportunity to sample it at the cellar doors located throughout the region.
+
+--- Chunk 2 ---
+AIDO Tohoku Above: Higashimokoto Shibazakura Park, Hokkaido. Below: Cherry blossom season at Tsuruga Castle in Fukushima Prefecture. JNTO2020p06_10_main_V8_MR_F.indd 7JNTO2020p06_10_main_V8_MR_F.indd 7 26/10/20 9:55 am26/10/20 9:55 am 6 The Luxury of Experience EXPLORE Experiencing Japan Japan has o
+
+--- Chunk 3 ---
+craftsmanship in abundance. • SENGAN-EN in Kagoshima Prefecture is the expansive estate of the Shimazu clan of samurai who ruled here during the Edo Period. Touring the traditional house and manicured gardens hint at the opulence of life for Japan’s ruling class in times gone by. • Kyushu boasts a n
 ```
 
 **Understanding check — read `src/rag.py` before answering:**
