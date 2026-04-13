@@ -3,7 +3,18 @@
     "name": "homes",
     "country": "haiti",
     "budget": 1000.0,
-    "notes": [],
+    "notes": [
+      "China is located in East Asia. It borders 14 countries, including Russia, Mongolia, India, and Vietnam. The country stretches from the Pacific Ocean in the east to Central Asia in the west, covering a vast area of 9.6 million square kilometers."
+    ],
+    "date_added": "2026-04-06"
+  },
+  {
+    "name": "NYC",
+    "country": "USA\\",
+    "budget": 1000.0,
+    "notes": [
+      "Focus on free/cheap iconic spots: **Central Park**, **High Line**, **Staten Island Ferry** (skyline views), **Brooklyn Bridge walk**, and **Times Square** (at night). \n\nSleep at ** Jazz on the Park** or **HI NYC Hostels** (dorms ~$50/night). Eat dollar pizza (e.g., **Joe's Pizza**), **Halal Guys** cart ($8 platter), and **Chelsea Market** (sample affordably). \n\nUse a **7-day MetroCard** ($34) for subways/buses. Skip taxis. For cheap eats, try **Katz\u2019s Deli** (pastrami sandwich, but share) or **Los Tacos No. 1** in Chelsea Market. \n\nVisit **MET Museum** (pay-what-you-wish for students) and **MoMA** (free Fridays 5:30\u20139 PM). Explore **Washington Square Park** and **East Village** for free vibes. \n\n**Safety tip:** Stay aware in crowded areas, use well-lit subway stations at night. Book hostels/transport early for best prices."
+    ],
     "date_added": "2026-04-06"
   }
 ]
