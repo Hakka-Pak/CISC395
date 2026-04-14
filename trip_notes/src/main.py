@@ -4,7 +4,9 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.ai_assistant import ask, TRAVEL_SYSTEM_PROMPT, generate_trip_briefing
+from src.ai_assistant import rag_ask
 from src.models import Destination
+from src.rag import build_index
 from src.storage import load_trips, save_trips
 
 
@@ -127,6 +129,12 @@ def show_trip_briefing(collection) -> None:
 		print("Briefing failed. Check your API connection.")
 
 
+def search_my_guides() -> None:
+	question = input("Your question: ")
+	answer = rag_ask(question)
+	print(answer)
+
+
 def main() -> None:
 	collection = load_trips()
 
@@ -140,6 +148,8 @@ def main() -> None:
 		print("\n-- AI --")
 		print("[6] Ask AI a travel question")
 		print("[7] Trip Briefing\n")
+		print("[8] Search my guides\n")
+		print("[R] Rebuild search index")
 		print("[Q] Quit")
 
 		choice = input("Choose an option: ")
@@ -156,6 +166,12 @@ def main() -> None:
 			ask_ai(collection)
 		elif choice == "7":
 			show_trip_briefing(collection)
+		elif choice == "8":
+			search_my_guides()
+		elif choice.lower() == "r":
+			print("Rebuilding index from guides/...")
+			build_index(force=True)
+			print("Done. Use [8] to search your updated guides.")
 		elif choice.lower() == "q":
 			print("Goodbye!")
 			break

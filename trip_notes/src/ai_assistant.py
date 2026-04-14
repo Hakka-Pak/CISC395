@@ -2,6 +2,7 @@ import os
 import openai
 from openai import OpenAI
 from dotenv import load_dotenv, find_dotenv
+from src.rag import search_guides
 
 load_dotenv(find_dotenv())
 
@@ -41,6 +42,24 @@ def ask(user_message: str, system_prompt: str | None = None, temperature: float 
     except openai.APIConnectionError:
         print("Error: Could not connect to the API. Check your internet connection.")
         return None
+
+def rag_ask(question: str) -> str:
+    chunks = search_guides(question, n_results=3)
+    if not chunks:
+        return "No guides found. Add .txt, .md, or .pdf files to guides/ and press [R] to rebuild the index."
+
+    context = "\n\n---\n\n".join(chunks)
+    rag_system_prompt = f"""You are a travel assistant with access to the user's personal travel guides.
+Use the context below as your PRIMARY source. If the context contains relevant
+information, use it in your answer. If the context is insufficient, you may
+supplement with general knowledge but clearly indicate what comes from the guides
+and what is general advice. If the context has nothing relevant at all, say:
+I don't have specific guide information about that.
+
+Context from your travel guides:
+{context}"""
+
+    return ask(question, system_prompt=rag_system_prompt, max_tokens=2048)
 
 def generate_trip_briefing(city: str, country: str, notes: list = None) -> dict | None:
     base = f"Give a 3-sentence travel overview of {city}, {country}. Cover: what it's like to visit, best season to go, and one must-see attraction."
