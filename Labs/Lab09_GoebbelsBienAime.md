@@ -327,8 +327,11 @@ craftsmanship in abundance. • SENGAN-EN in Kagoshima Prefecture is the expansi
 1. Look at `chunk_text()`. Why does RAG split documents into chunks instead of sending the entire file to the LLM? (1–2 sentences)
 2. Look at `build_index()`. What does `all-MiniLM-L6-v2` convert each chunk into, and why does ChromaDB store these instead of raw text? (2 sentences)
 
-```
-[Your answers]
+```text
+1. RAG splits the document into chunks because the AI agent has context window limits and processing a large set of information can be risky and cost more, by chunking the system is able to find the and utilize the important information.
+
+2. all-MiniLM-L6-v2 convert each chunk into a sequence of numbers called a vector.ChromaDB stores the vectors instead of raw data because they enable semantic similarity search which allows the retrieval that is based off meaning rather than the matching words.
+
 ```
 
 **Commit:**
@@ -356,26 +359,29 @@ for i, c in enumerate(chunks, 1):
 
 **Search 1 — a question answered by one of your guides:**
 ```
-Query: [your query]
-Top chunk (first 60 words): [paste]
+Query: [what are the best spots in NYC?]
+Top chunk (first 60 words): [--- Chunk 1 ---
+New York City, USA — Travel Guide New York City is made up of five boroughs: Manhattan, Brooklyn, Queens, the Bronx, and Staten Island. Most tourists spend the majority of their time in Manhattan and Brooklyn. The subway runs 24 hours a day and is the fastest way to get around — a single ride costs]
 ```
 
 **Search 2 — a question that could span multiple guides:**
 ```
-Query: [your query]
-Top chunk (first 60 words): [paste]
+Query: [what is the best way to travel in japan?]
+Top chunk (first 60 words): [Visiting Japan is a mesmerizing experience where ancient traditions seamlessly blend with futuristic innovation. The country is known for its meticulously organized society, bustling neon-lit cities, and serene landscapes, all underpinned by a culture of deep respect. The best season to visit is dur]
 ```
 
 **Search 3 — a destination NOT in any of your guides:**
 ```
-Query: [your query]
+Query: [give me good places to visit in Cuba.]
 Top chunk (first 60 words): [paste — what did ChromaDB return?]
+
+in the city of Paris It takes its name after the confessor of Louis XIV, Jesuit Father Lachaise, who used to live on the site Napoleon established a cemetery here in 1804 after the city of Paris purchased the area Jim Morrison, the legendary singer of The Doors, is buried here (one of the reason for
 ```
 
 **Understanding check:** For Search 3, ChromaDB returned something even though that destination is not in your guides. Why does this always happen? What should `rag_ask()` do to handle this gracefully? (2–3 sentences)
 
-```
-[Your answer]
+```text
+ChromaDB returns the result that is nearest, meaning it looks for the closest vector even if it does not answer the question correctly, ChromaDB will provide a result. You can have rag_ask() to tell the AI to not answer if it does not have the correct information or answer.
 ```
 
 ---
@@ -428,14 +434,15 @@ Run `python src/main.py` and test the following. Paste the full terminal output:
 
 **Compare:** What is different between the `[6]` answer and the `[8]` answer for the same question? (2–3 sentences)
 
+
 ```
-[Your answer]
+comparing the answers from 6 and 8, 6 gave a thorough answer into different ways you can travel such as utilizing the train and having tickets that could easily help you get around, number 8 gives you information of how you can travel around japan and where you can get the resources in order to get around
 ```
 
 **Understanding check:** You added a new file to `guides/` and tried option `[8]`. The answer didn't include information from the new file. Why? What do you do to fix it? (1–2 sentences)
 
 ```
-[Your answer]
+The new file wasn't included because the ChromaDB search index was already built and doesn't automatically update the menu.
 ```
 
 **Commit:**
