@@ -284,6 +284,14 @@ Type or paste a question when prompted. You should see `[Tool call]` and `[Tool 
 
 ```
 [Paste output here]
+
+Your question: what is the usual weather temperature in Tokyo?
+
+[Tool call] get_weather({'city': 'Tokyo'})
+[Tool result] Tokyo: Light rain shower, 19°C / 66°F...
+
+Agent answer:
+Tokyo’s typical temperature hovers around **19 °C (about 66 °F)**, with light rain in the forecast right now. Let me know if you’d like more details—such as average seasonal temperatures, a travel itinerary, or budgeting help!
 ```
 
 **Step 2 — Test with 3 questions:**
@@ -411,12 +419,72 @@ Please read and follow the instructions in #file:trip_notes/prompts/Lab10_Ex03_m
 
 **Paste the `[10]` handler from `main.py`:**
 ```python
-[Paste here]
+def ai_travel_agent(collection) -> None:
+        print("The agent can calculate budgets, check real-time weather, and search your travel guides.")
+        question = input("Your question: ")
+        print("\nThinking...\n")
+        result = run_agent(question)
+        if result is None:
+                print("Error: Could not get a response from Agent.")
+                return
+        print("\nAgent answer:\n" + result)
+
+        save_choice = input("\nSave this as a note on a trip? (y/n): ")
+        if save_choice.lower() == "y":
+                if len(collection) == 0:
+                        print("No trips saved yet.")
+                        return
+
+                show_all_trips(collection)
+                try:
+                        trip_index = int(input("Trip number: ")) - 1
+                        if trip_index < 0 or trip_index >= len(collection):
+                                raise IndexError
+                        trip = collection.get_by_index(trip_index)
+                except (ValueError, IndexError):
+                        print("Invalid option, saving cancelled.")
+                        return
+
+                trip.add_note(result)
+                save_trips(collection)
+                print(f"Saved as a note on {trip.name}.")
 ```
 
 **Paste a test session with one compound question:**
 ```
-[Paste terminal output]
+Choose an option: 10
+The agent can calculate budgets, check real-time weather, and search your travel guides.
+Your question: What is the weather in Tokyo and based on that, what should my daily budget be for a 5 day stay with $800 total?
+
+Thinking...
+
+[Tool call] get_weather({'city': 'Tokyo'})
+[Tool result] Tokyo: Light rain shower, 19°C / 66°F...
+[Tool call] budget_breakdown({'budget_usd': 800, 'days': 5, 'destination': 'Tokyo'})
+[Tool result] 5-day Tokyo budget ($800.00 total)
+Daily: $160.00
+  Accommodation : $64.00
+  Food          : $48.00
+  Transport     : $2...
+
+Agent answer:
+**Tokyo Weather:**  
+- Current conditions: Light rain shower  
+- Temperature: 19 °C (66 °F)  
+
+**5‑Day Budget with $800 Total:**  
+- **Daily budget:** **$160**  
+- Suggested daily allocation:  
+  - **Accommodation:** $64  
+  - **Food:** $48  
+  - **Transport:** $24  
+  - **Activities/Entertainment:** $24  
+
+*Note:* This breakdown assumes a mid‑range hotel/guesthouse, typical street‑food/regular‑restaurant meals, public‑transport fares, and a modest amount for attractions. Adjust any category up or down based on your personal preferences (e.g., splurging on a nicer dinner, adding extra tours, or opting for budget hostels). Also, keep an extra small buffer for incidental expenses or souvenirs.  
+
+Stay dry and enjoy your trip! 🌧️🗼
+
+Save this as a note on a trip? (y/n): n
 ```
 
 **Commit:**
@@ -433,17 +501,17 @@ git push
 **1.** Compare options `[6]`, `[8]`, and `[10]` in your menu. For each, describe a travel question where it is the **best** choice and explain why. (6–8 sentences total)
 
 ```
-[6] Ask AI:           best for...
+[6] Ask AI:           best for... general knowledge or creative generation without specific constraints (e.g. "What are some fun facts about Japan?"). It runs quickly using base LLM pre-training.
 
-[8] Search my guides: best for...
+[8] Search my guides: best for... specific factual queries that rely directly on your local proprietary travel documents (e.g. "What does the Paris guide say about transit?").
 
-[10] AI Travel Agent: best for...
+[10] AI Travel Agent: best for... complex combinations of planning that require math, local guides, AND up-to-date data (e.g. "I'm going to Tokyo for 5 days with $1000 right now. Based on the weather and the local guide, how should I spend the money and my time?").
 ```
 
 **2.** The `get_weather` tool calls a real external API. Why is it better to have the agent call this tool rather than just asking the LLM "what's the weather in Tokyo?" directly? What category of problem does this solve? (3 sentences)
 
 ```
-[Your answer]
+It's better to have the agent call an external API because LLMs have a knowledge cutoff and lack intrinsic real-time connectivity, so asking the LLM "what's the weather" forces it to guess based purely on historical pre-training rather than returning current conditions. Giving it a tool solves the "real-time fetching and freshness" category of problem. It gives the deterministic logic and updated state data of traditional web APIs to the otherwise frozen, probabilistic mind of the LLM. 
 ```
 
 ---
