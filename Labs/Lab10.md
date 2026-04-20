@@ -292,23 +292,99 @@ Run `python tests/test_agent.py` again for each question below. Copy-paste the q
 
 Test 1 (computation): `I have $1200 for 8 days in Tokyo. Break down my budget.`
 ```
-[Paste full output — should show [Tool call] budget_breakdown(...)]
+=== Agent Test ===
+The agent will show [Tool call] and [Tool result] as it works.
+
+Your question: I have $1200 for 8 days in Tokyo. Break down my budget.
+
+[Tool call] budget_breakdown({'budget_usd': 1200, 'days': 8, 'destination': 'Tokyo'})
+[Tool result] 8-day Tokyo budget ($1200.00 total)
+Daily: $150.00
+  Accommodation : $60.00
+  Food          : $45.00
+  Transport     : $...
+
+Agent answer:
+Here's your detailed budget breakdown for an 8-day trip to Tokyo with a $1200 total budget:
+
+**Daily Budget:** $150.00  
+- **Accommodation:** $60.00/day (e.g., budget hotels/hostels)  
+- **Food:** $45.00/day (mix of local street food, convenience stores, and mid-range meals)  
+- **Transport:** $22.50/day (public transit passes or taxis)  
+- **Activities:** $22.50/day (museums, temples, or free cultural sites)  
+
+This is a recommended split to cover essentials while allowing flexibility. Would you like tips for optimizing specific categories (e.g., cheap eats, free activities) or adjust any allocations?
 ```
 
 Test 2 (real-time data): `What's the weather like in Paris right now?`
 ```
-[Paste full output — should show [Tool call] get_weather(...)]
+=== Agent Test ===
+The agent will show [Tool call] and [Tool result] as it works.
+
+Your question: What's the weather like in Paris right now?
+
+[Tool call] get_weather({'city': 'Paris'})
+[Tool result] Paris: Cloudy, 9°C / 49°F...
+
+Agent answer:
+Right nowin Paris it’s cloudy with a temperature of 9 °C (49 °F).
 ```
 
 Test 3 (two tools): `I'm planning a trip to Tokyo. Check the current weather and search my travel guides for things to do.`
 ```
-[Paste full output — should show two [Tool call] lines]
+=== Agent Test ===
+The agent will show [Tool call] and [Tool result] as it works.
+
+Your question: I'm planning a trip to Tokyo. Check the current weather and search my travel guides for things to do.
+
+[Tool call] get_weather({'city': 'Tokyo'})
+[Tool result] Tokyo: Light rain shower, 19°C / 66°F...
+[Tool call] search_guides_tool({'query': 'things to do in Tokyo'})
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights: 100%|█████████████████████| 103/103 [00:00<00:00, 7764.72it/s]
+BertModel LOAD REPORT from: sentence-transformers/all-MiniLM-L6-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:   can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+[Tool result] Visiting Japan is a mesmerizing experience where ancient traditions seamlessly blend with futuristic innovation. The cou...
+
+Agent answer:
+**Current Weather in Tokyo**
+
+- **Condition:** Light rain shower  
+- **Temperature:** 19 °C  (66 °F)  
+
+**Things to Do in Tokyo (Based on Travel Guides)**  
+
+| Category | Highlights | Why It’s Worth It |
+|----------|------------|-------------------|
+| **Iconic Landmarks** | • *Shibuya Crossing* – world‑famous intersection; <br>• *Meiji Shrine* – serene Shinto shrine in a forested park; <br>• *Tokyo Tower / Tokyo Skytree* – panoramic city views | Mix of vibrant city life and cultural heritage. |
+| **Traditional Experience** | • *Asakusa & Senso‑ji Temple* – old‑town vibes, historic street markets; <br>• *Tsukiji Outer Market* – fresh seafood, Japanese street food | Taste Japan’s culinary roots and walk through centuries‑old streets. |
+| **Modern & Pop Culture** | • *Akihabara* – electronics, anime, and gaming hub; <br>• *Harajuku & Omotesando* – fashion boutiques, quirky street style; <br>• *Ghibli Museum* (by appointment) | Immerse in Japan’s cutting‑edge pop culture. |
+| **Parks & Relaxation** | • *Ueno Park* – cherry blossoms (if in season), museums, zoo; <br>• *Shinjuku Gyoen National Garden* – spacious lawns, seasonal flowers; <br>• *Odaiba Seaside Park* – waterfront, futuristic architecture | Balance the bustling city with greenery and calm. |
+| **Shopping & Souvenirs** | • *Ginza* – upscale department stores, luxury brands; <br>• *Omotesando Hills* – modern design; <br>• *Nakamise Street (Senso‑ji)* – traditional snacks & souvenirs | Find everything from high‑end to traditional Japanese craft. |
+| **Culinary Adventures** | • *Sushi at Tsukiji Outer Market*; <br>• *Ramen all‑night (Shin‑yoku or Ichiran)*; <br>• *Okonomiyaki in Okonomiyaki‑demo* | Sample authentic Japanese cuisine across the city. |
+| **Special Experiences** | • *Night bus around Tokyo Bay* – see city lights from the water; <br>• *Sumo practice (if free viewing, e.g., Ryogoku Kokugikan)* | Unique glimpses of Japanese traditions. |
+| **Practical Tips (for a budget traveler)** | • Use convenience stores (7‑Eleven, Lawson) for quick meals<br>• Pre‑purchased IC cards (Suica/Pasmo) for transit <br>• Keep some cash — many smaller spots don’t accept cards | Keeps costs down while still enjoying key sights. |
+
+---
+
+**Quick Plan for a 3‑day Stay**
+
+1. **Day 1** – Morning: Asakusa + Senso‑ji; Lunch at Tsukiji Market; Afternoon: Hamarikyu Gardens; Night: Kabuki‑theater or explore Shibuya crossing and Harajuku.  
+2. **Day 2** – Morning: Meiji Shrine; Mid‑day: Omotesando & Harajuku; Lunch at a themed café; Afternoon: Akihabara; Evening: Ramen marathon in Shinjuku.  
+3. **Day 3** – Morning: Tokyo Skytree & Sumida Aquarium; Lunch at a sushi spot; Afternoon: Ueno Park (museums or zoo) or a stroll through Yanaka‑Gyoen; Evening: Odaiba waterfront cruise and light show.
+
+Enjoy your trip! Let me know if you’d like restaurant recommendations, transit routes, or any other details.
 ```
 
 **Understanding check:** In Test 3, the agent called two different tool types (HTTP API + local guide search). Why couldn't the LLM answer both parts of that question without tools? (2–3 sentences)
 
 ```
-[Your answer]
+The LLM couldn't answer the question without tools because it doesn't have access to real-time data like current weather, and it doesn't know the exact content of local proprietary guides unless we retrieve and feed them into the prompt. Without the HTTP weather tool, it would hallucinate a guess at the weather based on historical averages rather than knowing it right now. Without the local guide search tool, it would hallucinate recommendations from its pre-training rather than returning our personalized data.
 ```
 
 **Commit:**
