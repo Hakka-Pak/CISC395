@@ -8,6 +8,7 @@ from src.ai_assistant import rag_ask
 from src.models import Destination
 from src.rag import build_index
 from src.storage import load_trips, save_trips
+from src.tools import run_agent
 
 
 def show_all_trips(collection) -> None:
@@ -134,6 +135,35 @@ def search_my_guides() -> None:
 	answer = rag_ask(question)
 	print(answer)
 
+def ai_travel_agent(collection) -> None:
+	print("The agent can calculate budgets, check real-time weather, and search your travel guides.")
+	question = input("Your question: ")
+	print("\nThinking...\n")
+	result = run_agent(question)
+	if result is None:
+		print("Error: Could not get a response from Agent.")
+		return
+	print("\nAgent answer:\n" + result)
+	
+	save_choice = input("\nSave this as a note on a trip? (y/n): ")
+	if save_choice.lower() == "y":
+		if len(collection) == 0:
+			print("No trips saved yet.")
+			return
+
+		show_all_trips(collection)
+		try:
+			trip_index = int(input("Trip number: ")) - 1
+			if trip_index < 0 or trip_index >= len(collection):
+				raise IndexError
+			trip = collection.get_by_index(trip_index)
+		except (ValueError, IndexError):
+			print("Invalid option, saving cancelled.")
+			return
+
+		trip.add_note(result)
+		save_trips(collection)
+		print(f"Saved as a note on {trip.name}.")
 
 def main() -> None:
 	collection = load_trips()
@@ -149,6 +179,7 @@ def main() -> None:
 		print("[6] Ask AI a travel question")
 		print("[7] Trip Briefing\n")
 		print("[8] Search my guides\n")
+		print("[10] AI Travel Agent\n")
 		print("[R] Rebuild search index")
 		print("[Q] Quit")
 
@@ -168,6 +199,8 @@ def main() -> None:
 			show_trip_briefing(collection)
 		elif choice == "8":
 			search_my_guides()
+		elif choice == "10":
+			ai_travel_agent(collection)
 		elif choice.lower() == "r":
 			print("Rebuilding index from guides/...")
 			build_index(force=True)

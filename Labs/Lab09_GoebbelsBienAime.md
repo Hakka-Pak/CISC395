@@ -327,7 +327,7 @@ craftsmanship in abundance. • SENGAN-EN in Kagoshima Prefecture is the expansi
 1. Look at `chunk_text()`. Why does RAG split documents into chunks instead of sending the entire file to the LLM? (1–2 sentences)
 2. Look at `build_index()`. What does `all-MiniLM-L6-v2` convert each chunk into, and why does ChromaDB store these instead of raw text? (2 sentences)
 
-```text
+```
 1. RAG splits the document into chunks because the AI agent has context window limits and processing a large set of information can be risky and cost more, by chunking the system is able to find the and utilize the important information.
 
 2. all-MiniLM-L6-v2 convert each chunk into a sequence of numbers called a vector.ChromaDB stores the vectors instead of raw data because they enable semantic similarity search which allows the retrieval that is based off meaning rather than the matching words.
@@ -380,7 +380,7 @@ in the city of Paris It takes its name after the confessor of Louis XIV, Jesuit 
 
 **Understanding check:** For Search 3, ChromaDB returned something even though that destination is not in your guides. Why does this always happen? What should `rag_ask()` do to handle this gracefully? (2–3 sentences)
 
-```text
+```
 ChromaDB returns the result that is nearest, meaning it looks for the closest vector even if it does not answer the question correctly, ChromaDB will provide a result. You can have rag_ask() to tell the AI to not answer if it does not have the correct information or answer.
 ```
 
@@ -459,19 +459,19 @@ git push
 **1.** `.txt`, `.md`, and `.pdf` are all supported, but they are not equally reliable for RAG. What makes a document work well for indexing? What kind of PDF would fail silently and why? (2–3 sentences)
 
 ```
-[Your answer]
+a clean document with plain machine readable text without any complex visual layouts. a scanned pdf that is composed of just images, since the parsing tools would be looking for next not an image which results in no data being added to the index.
 ```
 
 **2.** The index is built from your `guides/` files and saved in `chroma_db/`. What happens if you delete a guide file but do not rebuild the index — will the old chunks still show up in search results? Is this a problem? (2–3 sentences)
 
 ```
-[Your answer]
+yes, this would be a problem if you delete the guide without rebuilding the index, old information will still show up when you search and your AI agent will keep providing you information that was deleted, this is because that information is still stored inside ChromaDB. 
 ```
 
 **3.** You now have two ways to ask questions: `ask()` (option `[6]`) and `rag_ask()` (option `[8]`). Describe a scenario where `rag_ask()` gives a *worse* answer than `ask()`. (2–3 sentences)
 
 ```
-[Your answer]
+A scenario I could think of where you would get a worse answer from rag_ask() would be if you asked a question that is not covered at all in the local guide, this would be due to its strict prompt where it can only use the information it gets from text chunks, by asking rag_ask() a general question would lead to an answer that would most likely not make sense. 
 ```
 
 ---
@@ -485,7 +485,7 @@ Submit **two things** on Blackboard:
 
 **Paste your GitHub repository URL here:**
 ```
-https://github.com/[your-username]/CISC395
+https://github.com/Hakka-Pak/CISC395
 ```
 
 Expected commits (in order):

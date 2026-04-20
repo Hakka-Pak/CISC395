@@ -462,11 +462,11 @@ def main():
     print(f"{'─' * 45}")
 
     if failed == 0:
-        print(f"\n  All checks passed. You're ready for Lab {lab:02d}.")
+        print(f"\n  All checks passed. You're ready for Lab {lab + 1:02d}.")
         if not args.env:
             print("  Tip: run with --env to also verify your API environment.")
     else:
-        print(f"\n  {failed} issue(s) found. Fix them before starting Lab {lab:02d}.")
+        print(f"\n  {failed} issue(s) found. Fix them before continuing.")
         print("  Show this output to your AI:")
         print(f'  "Fix the failing checks shown by tests/check_progress.py --lab {lab:02d}"')
 
