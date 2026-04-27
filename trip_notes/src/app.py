@@ -10,7 +10,8 @@ st.set_page_config(
 )
 
 from src.storage import load_trips
-from src.ai_assistant import ask, TRAVEL_SYSTEM_PROMPT, client, MODEL
+from src.ai_assistant import ask, TRAVEL_SYSTEM_PROMPT, client, MODEL, rag_ask
+from src.rag import ensure_index
 
 # Initialize Session State
 if "trips" not in st.session_state:
@@ -24,6 +25,8 @@ if "search_history" not in st.session_state:
 
 if "agent_history" not in st.session_state:
     st.session_state["agent_history"] = []
+
+ensure_index()
 
 # Sidebar
 st.sidebar.title("✈️ Trip Notes AI")
@@ -94,7 +97,29 @@ with tab1:
         st.session_state["chat_history"].append({"role": "assistant", "content": content})
 
 with tab2:
-    st.info("Coming soon — Exercise 3")
+    st.subheader("Search My Guides")
+    st.caption("Answers grounded in your guides/ documents.")
+
+    if st.button("Clear search", key="clear_search"):
+        st.session_state["search_history"] = []
+        st.rerun()
+
+    # Display search history
+    for message in st.session_state["search_history"]:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+
+    if search_input := st.chat_input("Search your guides...", key="search_input"):
+        st.session_state["search_history"].append({"role": "user", "content": search_input})
+        with st.chat_message("user"):
+            st.markdown(search_input)
+
+        with st.chat_message("assistant"):
+            with st.spinner("Searching guides..."):
+                response = rag_ask(search_input)
+                st.markdown(response)
+        
+        st.session_state["search_history"].append({"role": "assistant", "content": response})
 
 with tab3:
     st.info("Coming soon — Exercise 4")
