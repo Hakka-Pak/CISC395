@@ -12,6 +12,7 @@ st.set_page_config(
 from src.storage import load_trips
 from src.ai_assistant import ask, TRAVEL_SYSTEM_PROMPT, client, MODEL, rag_ask
 from src.rag import ensure_index
+from src.tools import run_agent, TOOL_DEFINITIONS
 
 # Initialize Session State
 if "trips" not in st.session_state:
@@ -122,4 +123,36 @@ with tab2:
         st.session_state["search_history"].append({"role": "assistant", "content": response})
 
 with tab3:
-    st.info("Coming soon — Exercise 4")
+    st.subheader("AI Travel Agent")
+    st.caption("The agent uses tools: budget calculation, live weather, and guide search.")
+
+    agent_input = st.text_area(
+        "Your question:",
+        placeholder="e.g. I have $1200 for 8 days in Tokyo. Check the weather and break down my budget."
+    )
+
+    if st.button("Ask the Agent"):
+        if agent_input.strip():
+            with st.spinner("Agent is working..."):
+                agent_answer = run_agent(agent_input)
+            
+            st.markdown(agent_answer)
+            
+            with st.expander("▶ Tools available to this agent"):
+                for tool in TOOL_DEFINITIONS:
+                    st.markdown(f"• `{tool['function']['name']}`")
+                    
+            st.session_state["agent_history"].append({
+                "question": agent_input,
+                "answer": agent_answer
+            })
+        else:
+            st.warning("Please enter a question for the agent.")
+
+    if st.session_state["agent_history"]:
+        st.markdown("---")
+        st.markdown("Previous queries this session:")
+        for idx, entry in enumerate(reversed(st.session_state["agent_history"])):
+            short_q = entry["question"][:60] + ("..." if len(entry["question"]) > 60 else "")
+            with st.expander(f"▶ Q: {short_q}"):
+                st.markdown(entry["answer"])
