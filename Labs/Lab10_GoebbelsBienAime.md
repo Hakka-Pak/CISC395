@@ -500,6 +500,8 @@ git push
 
 **1.** Compare options `[6]`, `[8]`, and `[10]` in your menu. For each, describe a travel question where it is the **best** choice and explain why. (6–8 sentences total)
 
+for 6, 8, and 10, I gave the same question, asking 'what is the best place to travel' option 6 gave me southeast asia as its response, it saw this destination as student friendly because of how cheap the cost would be for food and accommodations. option 8 gave me several different places such as Tokyo, Hokuriku Shinetsu Tok, mountain retreats based off how you are feeling, if you wanted to do luxury, adventureous, or a food enthusiast. as for option 10 I recieved an error response. 
+
 ```
 [6] Ask AI:           best for... general knowledge or creative generation without specific constraints (e.g. "What are some fun facts about Japan?"). It runs quickly using base LLM pre-training.
 
@@ -511,7 +513,7 @@ git push
 **2.** The `get_weather` tool calls a real external API. Why is it better to have the agent call this tool rather than just asking the LLM "what's the weather in Tokyo?" directly? What category of problem does this solve? (3 sentences)
 
 ```
-It's better to have the agent call an external API because LLMs have a knowledge cutoff and lack intrinsic real-time connectivity, so asking the LLM "what's the weather" forces it to guess based purely on historical pre-training rather than returning current conditions. Giving it a tool solves the "real-time fetching and freshness" category of problem. It gives the deterministic logic and updated state data of traditional web APIs to the otherwise frozen, probabilistic mind of the LLM. 
+it is a better option to have have the AI agent call to an external API since large language models rely on historical data for training, LLM's have a knowledge cut off and lack internet connectivity so by asking it for the weather condition it can give you an answer that is incorrect. 
 ```
 
 ---
