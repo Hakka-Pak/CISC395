@@ -10,7 +10,7 @@ st.set_page_config(
 )
 
 from src.storage import load_trips
-from src.ai_assistant import ask, TRAVEL_SYSTEM_PROMPT, client
+from src.ai_assistant import ask, TRAVEL_SYSTEM_PROMPT, client, MODEL
 
 # Initialize Session State
 if "trips" not in st.session_state:
@@ -64,7 +64,34 @@ if selected_trip:
 tab1, tab2, tab3 = st.tabs(["💬 Chat", "🔍 Search", "🤖 Agent"])
 
 with tab1:
-    st.info("Coming soon — Exercise 2")
+    st.subheader("Atlas — Your Travel AI")
+    st.caption("Ask me anything about travel.")
+
+    if st.button("Clear chat", key="clear_chat"):
+        st.session_state["chat_history"] = []
+        st.rerun()
+
+    # Display chat history
+    for message in st.session_state["chat_history"]:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+
+    if prompt := st.chat_input("Ask Atlas anything..."):
+        st.session_state["chat_history"].append({"role": "user", "content": prompt})
+        with st.chat_message("user"):
+            st.markdown(prompt)
+
+        MAX_TURNS = 8
+        messages = [{"role": "system", "content": TRAVEL_SYSTEM_PROMPT}]
+        messages.extend(st.session_state["chat_history"][-(MAX_TURNS * 2):])
+
+        with st.chat_message("assistant"):
+            with st.spinner("Atlas is thinking..."):
+                response = client.chat.completions.create(model=MODEL, messages=messages)
+                content = response.choices[0].message.content
+                st.markdown(content)
+        
+        st.session_state["chat_history"].append({"role": "assistant", "content": content})
 
 with tab2:
     st.info("Coming soon — Exercise 3")
